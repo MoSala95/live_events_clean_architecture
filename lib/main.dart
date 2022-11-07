@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:live_events_clean_architecture/core/app_global_services/localization_service.dart';
+
 import './app.dart';
-import './sevice_locator.dart';
+import './service_locator.dart';
+import 'config/app_services/localization/localization_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await init();
+  runApp(const PhysiciansApp());
+}
+
+Future<void> init() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent, // transparent status bar
   ));
-  setupLocator();
+  serviceLocator();
   await LocalizationService().loadTranslationsFiles();
-
-  runApp(const PhysiciansApp());
 }
