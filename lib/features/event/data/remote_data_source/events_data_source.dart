@@ -1,18 +1,18 @@
 import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
-import 'package:live_events_clean_architecture/core/api/api_client.dart';
-import 'package:live_events_clean_architecture/core/api/api_consumer.dart';
-import 'package:live_events_clean_architecture/core/api/end_points.dart';
-import 'package:live_events_clean_architecture/core/app_global_services/settings_service.dart';
-import 'package:live_events_clean_architecture/core/error/exceptions.dart';
-import 'package:live_events_clean_architecture/core/error/failures.dart';
- import 'package:live_events_clean_architecture/core/utils/print.dart';
+import 'package:live_events_clean_architecture/core/utils/print.dart';
 import 'package:live_events_clean_architecture/features/event/data/models/request/event_request_search_model.dart';
 import 'package:live_events_clean_architecture/features/event/data/models/response/events_response_model.dart';
 import 'package:live_events_clean_architecture/features/event/data/remote_data_source/abstract_events_data_source.dart';
 import 'package:live_events_clean_architecture/features/event/data/transormers/event_transformer.dart';
 import 'package:live_events_clean_architecture/features/event/domain/entities/event_entity.dart';
 
+import '../../../../config/app_services/settings_service.dart';
+import '../../../../core/networking/api/api_client.dart';
+import '../../../../core/networking/api/api_consumer.dart';
+import '../../../../core/networking/api/end_points.dart';
+import '../../../../core/networking/error/exceptions.dart';
+import '../../../../core/networking/error/failures.dart';
 
 class EventsRemoteDataSourceImp extends AbstractEventsRemoteDateSource {
   final ApiConsumer _apiConsumer = Get.find<ApiConsumer>();
@@ -21,22 +21,21 @@ class EventsRemoteDataSourceImp extends AbstractEventsRemoteDateSource {
 
   final settingService = Get.find<SettingsService>();
 
-
   @override
-  Future<Either<Failure, EventEntity>> getEventsPerPage({required int page}) async{
+  Future<Either<Failure, EventEntity>> getEventsPerPage(
+      {required int page}) async {
     try {
-      final response=
-          await ApiClient.callApiAndHandleResponse(
-            () => _apiConsumer.get(EndPoints.baseUrl,quaryparam: {"page":"$page"}),
+      final response = await ApiClient.callApiAndHandleResponse(
+        () =>
+            _apiConsumer.get(EndPoints.baseUrl, quaryparam: {"page": "$page"}),
       );
 
       if (response == null) {
         return Left(ServerFailure("error get the data"));
       } else {
-
-        final eventsResponse =
-        EventsResponse.fromJson(response!);
-        EventEntity eventEntity =eventTransformer.transformToEntityModel(eventsResponse);
+        final eventsResponse = EventsResponse.fromJson(response);
+        EventEntity eventEntity =
+            eventTransformer.transformToEntityModel(eventsResponse);
 
         return Right(eventEntity);
       }
@@ -51,20 +50,21 @@ class EventsRemoteDataSourceImp extends AbstractEventsRemoteDateSource {
   }
 
   @override
-  Future<Either<Failure, EventEntity>> getSearchedEvents({required EventSearchRequestModel searchRequestModel}) async{
+  Future<Either<Failure, EventEntity>> getSearchedEvents(
+      {required EventSearchRequestModel searchRequestModel}) async {
     try {
-      final response=
-          await ApiClient.callApiAndHandleResponse(
-            () => _apiConsumer.get(EndPoints.baseUrl,quaryparam: searchRequestModel.toJson()),
+      final response = await ApiClient.callApiAndHandleResponse(
+        () => _apiConsumer.get(EndPoints.baseUrl,
+            quaryparam: searchRequestModel.toJson()),
       );
 
-      if (response == null ) {
+      if (response == null) {
         return Left(ServerFailure("error get the data"));
       } else {
         dPrint(response.toString());
-        final eventsResponse =
-        EventsResponse.fromJson(response!);
-        EventEntity eventEntity =eventTransformer.transformToEntityModel(eventsResponse);
+        final eventsResponse = EventsResponse.fromJson(response);
+        EventEntity eventEntity =
+            eventTransformer.transformToEntityModel(eventsResponse);
 
         return Right(eventEntity);
       }

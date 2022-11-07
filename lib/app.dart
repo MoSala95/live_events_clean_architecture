@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:live_events_clean_architecture/core/app_config/app_config.dart';
-import 'package:live_events_clean_architecture/core/app_global_services/localization_service.dart';
- import 'package:live_events_clean_architecture/router/routes_constants.dart';
+import 'package:live_events_clean_architecture/config/app/app_config.dart';
 
-
- import 'core/ui_helpers/app_theme/app_theme_data.dart';
-import 'router/router.dart';
+import 'config/app_services/localization/localization_service.dart';
+import 'config/router/routes.dart';
+import 'config/themes/app_theme_data.dart';
 
 class PhysiciansApp extends StatelessWidget {
   const PhysiciansApp({super.key});
@@ -28,7 +26,7 @@ class PhysiciansApp extends StatelessWidget {
             translations: LocalizationService(),
             theme: AppThemeData.lightTheme,
             // darkTheme: AppThemeData.darkTheme,
-            initialRoute: RoutesConstants.mainEventsScreen,
+            initialRoute: Routes.mainEventsScreen,
             getPages: AppRouter.routes,
           );
         });

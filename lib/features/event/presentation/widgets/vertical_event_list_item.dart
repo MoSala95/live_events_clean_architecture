@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:live_events_clean_architecture/core/constants/app_assets.dart';
-import 'package:live_events_clean_architecture/core/logic_helpers/date_logic_helper.dart';
 import 'package:live_events_clean_architecture/features/event/data/models/response/events_response_model.dart';
+
+import '../../../../core/helpers/helper.dart';
+import '../../../../core/utils/constants/app_assets.dart';
 
 class VerticalEventWidget extends StatelessWidget {
   final Event event;
